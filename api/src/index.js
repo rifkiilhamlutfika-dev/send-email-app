@@ -5,11 +5,10 @@ const { response } = require("./components/resTemp");
 const app = express();
 const cors = require("cors");
 const port = 8000 || 3000;
+const amqp = require("amqplib");
 
 app.use(express.json());
 app.use(cors());
-
-const amqp = require("amqplib");
 
 const QUEUE = "send_message";
 
@@ -36,10 +35,6 @@ app.post("/send-message", (req, res) => {
 
   channel.sendToQueue(QUEUE, Buffer.from(JSON.stringify(emailData)));
   response(res, 200, {}, `Message Sent to Queue - ${QUEUE}`);
-});
-
-app.get("/", (req, res) => {
-  response(res, 200, ["ilham", "rifki", "lutfika"], "Server Error");
 });
 
 connectRabbitMQ().then(() => {
